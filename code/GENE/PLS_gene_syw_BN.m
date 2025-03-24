@@ -44,32 +44,21 @@ end
 
 % PLS1 ROIscores tmap
 PLS1_scores = XS(:,1);
-% 获取 Atlas 中的唯一标签（假设 Atlas 是整数标签，每个标签对应一个区域）
 unique_labels = 1:384;
-% unique_labels = unique(atlas_nii(:));
-% unique_labels = unique_labels(2:end,:);
-% % 判断数组中的奇数并保留,left
-% unique_labels = unique_labels(mod(unique_labels, 2) ~= 0);
-% % 判断数组中的偶数并保留,right
-% unique_labels = unique_labels(mod(unique_labels, 2) == 0);
-% 创建一个array，用于存储每个区域对应的 T Map 值
+
 tmap = zeros(size(atlas_nii));
 j = 1;
-% 遍历每个区域，找到对应的 T Map 值
 for i = 1:length(unique_labels)
     label = unique_labels(i);
     if label == roi(j,:)
-        % 在 Atlas 文件中找到当前区域的索引
         mask = (atlas_nii == label);
-        % 提取对应区域的 T Map 值
         tmap(mask) = PLS1_scores(j,:);   
         j = j + 1;
     end
 end
-% 保存nii,一定要修改fname,不然原始数据会被覆盖掉
 VA.fname = [data_dir,'BN_PLS1_scores.nii'];
 VA.dt = [16 0];
-spm_write_vol(VA,tmap); %保存为nii格式
+spm_write_vol(VA,tmap);
 
 % correlation between PLS score and t-map
 [corr_val,p_val] = corr(Y,PLS1_scores);
@@ -122,14 +111,12 @@ parfor j = 1:n_per
     [XLr,YLr,XSr,YSr,BETAr,PCTVARr,MSEr,statsr] = plsregress(X,Yp,dim);
     PCTVARrand(j,:) = PCTVARr(2,:); 
 end
-% 显著性p值
 p_single = zeros(1,dim);
 for l = 1:dim
     p_single(l) = length(find(PCTVARrand(:,l)>=PCTVAR(2,l)))/n_per;
 end
 
 myStats = [PCTVAR; p_single];
-% PCTVAR是自变量和因变量的解释方差
 csvwrite([data_dir,'PLS_stats.csv'],myStats);
 
 %% calculate corrected weight
