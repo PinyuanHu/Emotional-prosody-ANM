@@ -40,7 +40,7 @@ def get_perm_p(emp, null, twotailed=True):
 
 atlas = input('input atlas path:')
 coords = utils.get_centroids(atlas, image_space=True)
-hemiindex = np.arange(1, 384)
+hemiindex = np.arange(1, 384)#default AICHA
 hemiindex = (hemiindex+1) % 2
 nspins = 10000
 
