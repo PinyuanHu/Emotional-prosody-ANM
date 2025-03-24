@@ -1,14 +1,6 @@
-% 20240305 WHOLE BRAIN GENE
-% clc
-% clear
-% close all;
-
+function PLS_gene_syw_BN(pathA,data_dir)
 % Gene Association Analysis
-% define work dir
-data_dir = '/data1/pyhu/GENE/general_compare/';
-
 % Atlas
-pathA = '/data/home/pyhu/data/mask/AICHA/AICHA.nii';
 VA = spm_vol(pathA);
 atlas_nii = spm_read_vols(VA);
 
@@ -62,38 +54,6 @@ spm_write_vol(VA,tmap);
 
 % correlation between PLS score and t-map
 [corr_val,p_val] = corr(Y,PLS1_scores);
-
-% Draw figures for correlations
-% close all
-% dotcolor = [2 48 74]/255;
-% linecolor = [0 0 0];
-% ylable1 = 'PLS1 scores';
-% xlable1 = {'{\itz}-statistic of hemisphere-specific map'};
-% [xData, yData] = prepareCurveData(Y, PLS1_scores);
-% ft = fittype( 'poly1' );
-% opts = fitoptions( ft );
-% opts.Lower = [-Inf -Inf];
-% opts.Upper = [Inf Inf];
-% [fitresult, gof] = fit( xData, yData, ft, opts );
-% h=plot( fitresult, xData, yData);
-% set(h(1),'Marker','.','MarkerSize',6,'Color',dotcolor)
-% set(h(2),'LineWidth',0.5,'Color',linecolor)
-% hold on
-% xFit = linspace(min(xData),max(xData),100);
-% yPredict = predint(fitresult,xFit,0.95,'functional','off');
-% fy = cat(2,yPredict(:,2)',flip(yPredict(:,1),1)')';
-% fx = cat(2,xFit,flip(xFit',1)')';
-% fill(fx,fy,[0.5 0.5 0.5],'EdgeAlpha',0,'FaceAlpha',0.3);
-% hold off
-% legend off
-% ylabel(ylable1);
-% xlabel(xlable1);
-% set(gca,'LineWidth',0.5);
-% set(gca,'FontName','Arial','FontSize',10);
-% t1 = text(-2.5,0.25,{'{\itr} = 0.376';'{\itp} < 0.0001'},'FontName','Arial','FontSize',10);
-% grid off
-% box off
-% print(gcf,[data_dir,'corr_PLS1_tmap.tif'],'-dtiff','-r1000')
 csvwrite([data_dir,'PLS1_ROIscores.csv'],XS(:,1));
 
 % initial PLS
