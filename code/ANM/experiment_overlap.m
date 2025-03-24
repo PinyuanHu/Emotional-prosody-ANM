@@ -1,5 +1,5 @@
 function experiment_overlap(seedpath,atlaspath,output)
-    % atlaspath='/data/home/pyhu/data/mask/AICHA/AICHA.nii';
+
     atlasv=spm_vol(atlaspath);
     atlasy=spm_read_vols(atlasv);
     sub=dir(seedpath);
